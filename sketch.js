@@ -1,56 +1,38 @@
-var paper,paper2;
-var ground,basket1,basket2,basket3;
 
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
+const Render = Matter.Render;
+var dustbinObj, paperObject,groundObject	
+var world;
+
 
 function setup() {
-	createCanvas(1500, 500);
+	createCanvas(1600, 700);
 	rectMode(CENTER);
 
-	paper = createSprite(730,400,20,20,10);
-	paper.shapeColor=color("blue");
-
-	paper2 = createSprite(1100,370,20,20,10);
-	paper2.shapeColor=color("blue");
-
-	groundSprite=createSprite(750, 450, 1500,10);
-	groundSprite.shapeColor=color(255)
-
-	basket1 = createSprite(1100,400,400,10);
-	basket1.shapeColor=color("red");
-
-	basket2 = createSprite(900,350,10,100);
-	basket2.shapeColor=color("red");
-
-	basket3 = createSprite(1300,350,10,100);
-	basket3.shapeColor=color("red");
 
 	engine = Engine.create();
 	world = engine.world;
-
-	
-
+	dustbinObj=new dustbin(1200,650);
+	paperObject=new paper(200,450,40);
+	groundObject=new ground(width/2,670,width,20);
 	//Create a Ground
-	ground = Bodies.rectangle(width/2, 650, width, 10 , {isStatic:true} );
-	 World.add(world, ground);
-	 
-    basket3 = Bodies.rectangle(width/2, 800, width, 10 , {isStatic:true} );
-	 World.add(world, basket3);
 	
-	 basket1 = Bodies.rectangle(width/2, 630, width, 10 , {isStatic:true} );
-	 World.add(world, basket1);
 
-	 basket2 = Bodies.rectangle(width/2, 700, width, 10 , {isStatic:true} );
-	 World.add(world, basket2);
-
-	 paper = Bodies.circle(450,1100,10,{isStatic:true});
-
-
+	var render = Render.create({
+	  element: document.body,
+	  engine: engine,
+	  options: {
+	    width: 1200,
+	    height: 700,
+	    wireframes: false
+	  }
+	});
 
 	Engine.run(engine);
+	//Render.run(render);
   
 }
 
@@ -58,22 +40,23 @@ function setup() {
 function draw() {
   rectMode(CENTER);
   background(0);
-    var options={
-        isStatic:false,
-        restitution:0.3,
-        friction:0.5,
-        density:1.2
-    }
+ 
+  dustbinObj.display();
+  paperObject.display();
+  groundObject.display();
   
-
-  drawSprites();
+ 
+  
+  
  
 }
 
 function keyPressed() {
- if (keyCode === UP_ARROW) {
-	paper.velocity = 5;
-  }
+  	if (keyCode === UP_ARROW) {
+
+    	Matter.Body.applyForce(paperObject.body,paperObject.body.position,{x:85,y:-85});
+    
+  	}
 }
 
 
